@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<head>
+<title>SVG</title>
+<meta charset="utf-8" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+ <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+
+
+<script>
+var ipsum;
+
+var line_counter = 0;
+var container = d3.select("body")
+                .append("svg")
+                .attr("width", 1000).attr("height", 2500)
+                .attr("id","container")
+                .on("mousedown", mousedown)
+                .on("mouseup", mouseup);
+
+d3.select("#container")
+          .append("foreignObject")
+          .attr("width", 1000)
+          .attr("height", 1000)
+          .attr("id", "para")
+          .html("<h2 style='padding:50px'>Notesify</h2>"+getControlPanel()+getIpsum()+"<br><br>"+getIpsum());
+
+
+
+function mousedown(){
+    container.on("mousemove", drag);
+
+    var point = d3.mouse(this);
+    var p = {x: point[0], y: point[1] };
+    var width = 15;
+
+    container.append("line")
+                .attr({"x1":p.x,"y1":p.y,
+                       "x2":p.x+10,
+                       "y2":p.y,
+                       "stroke": $('#colorp').val(),
+                       "stroke-width":width
+                   })
+                .attr("id",function(){return "number"+line_counter++; })
+                .style("opacity",0.3);
+}
+
+
+function drag(){
+    var point = d3.mouse(this)
+  , p = {x: point[0], y: point[1] };
+    var id = "#number"+(line_counter-1);
+
+
+    var highlight = container.selectAll( id );
+    var width = highlight.attr("stroke-width");
+    var y1 = highlight.attr("y1");
+    var y2 = highlight.attr("y2");
+
+    if( (p.y-y2)/width > 1){
+        console.log((p.y-highlight.attr("y2"))/width);
+        highlight.attr("stroke-width", (parseInt(width)+16) );
+        highlight.attr("y1", (parseInt(y1)+8) )
+        highlight.attr("y2", (parseInt(y2)+8) );
+    }
+    if( width > 20 && (p.y-y2)/width < 0.25){
+        console.log((p.y-highlight.attr("y2"))/width);
+        highlight.attr("stroke-width", (parseInt(width)-16) );
+        highlight.attr("y1", (parseInt(y1)-8) )
+        highlight.attr("y2", (parseInt(y2)-8) );
+    }
+
+
+
+    container.selectAll( id ).attr({"x2":p.x})
+}
+
+
+function mouseup(){
+    container.on("mousemove", null);
+}
+
+
+
+
+$("#on").click(function(){
+    $("#on").css("background-color", "#AFE8DC" );
+    $("#off").css("background-color", "#FFFFFF");
+    container.on("mousedown", mousedown);
+
+})
+
+$("#off").click(function(){
+    $("#off").css("background-color", "#AFE8DC" );
+    $("#on").css("background-color", "#FFFFFF");
+    container.on("mousedown", null);
+
+})
+$("#off").css("background-color", "#AFE8DC" );
+container.on("mousedown", null);
+
+
+function getControlPanel(){
+    return '<div class="btn-group" style="display:inline-block;" width="200px" role="group"> <button type="button" id="on" class="btn btn-default">On</button> <button type="button" id="off" class="btn btn-default">Off</button><select id="colorp" class="form-control"><option>red</option><option>blue</option><option>green</option><option>yellow</option></select></div>'
+}
+$('.form-control').css("width", "100px");
+
+function getIpsum(){
+
+ return "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc scelerisque magna in lacinia tincidunt. Aliquam non rhoncus odio. Praesent eu feugiat nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam consequat justo sapien, in luctus ante ullamcorper a. Donec placerat congue turpis eu convallis. Quisque sed magna lacinia elit interdum blandit et semper dolor. Sed imperdiet nulla at sem volutpat, a tristique orci consequat. Curabitur at condimentum eros, suscipit efficitur nunc. Praesent pellentesque mauris a odio mattis pharetra. Donec egestas lacus condimentum turpis ornare mattis non ac eros. Suspendisse interdum erat cursus, pulvinar felis at, condimentum elit. Ut efficitur justo felis, sed commodo lorem vestibulum eget. Sed a convallis nibh. Nulla facilisi. Aenean eget volutpat mauris. Nam vehicula augue non aliquet suscipit. Donec turpis ipsum, placerat nec enim a, venenatis condimentum purus. Phasellus aliquam rhoncus arcu, et mattis massa facilisis a. Integer eleifend dolor nunc. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque quis feugiat ligula. Duis molestie dui a diam varius, aliquam viverra eros commodo. Nam cursus neque et maximus interdum. Donec elementum urna libero, ut ultrices nisi consectetur eget. Nam sed eros rhoncus, aliquet ante vitae, rutrum nisl. Vestibulum tincidunt dui sed neque sagittis imperdiet. Curabitur mattis venenatis sem, id lobortis orci congue quis. Integer eget vestibulum erat. Nunc rutrum nisi eget nibh hendrerit imperdiet. Sed condimentum dui sed faucibus pulvinar. Pellentesque id aliquet neque, ut egestas velit. Proin maximus eros vel sem ultricies pharetra. Vestibulum varius nisl nunc, at porta nisl maximus eu. Quisque laoreet aliquet elit ut gravida. Proin nec ante sit amet libero vehicula </p>"
+}
+
+(function($){
+    $.fn.disableSelection = function() {
+        return this
+                 .attr('unselectable', 'on')
+                 .css('user-select', 'none')
+                 .on('selectstart', false);
+    };
+})(jQuery);
+
+
+
+$("#para").attr('unselectable','on')
+     .css({'-moz-user-select':'-moz-none',
+           '-moz-user-select':'none',
+           '-o-user-select':'none',
+           '-khtml-user-select':'none', /* you could also put this in a class */
+           '-webkit-user-select':'none',/* and add the CSS class here instead */
+           '-ms-user-select':'none',
+           'user-select':'none'
+     }).bind('selectstart', function(){ return false; });
+
+
+</script>
+
+
+</body>
+</html>
