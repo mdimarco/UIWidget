@@ -63,15 +63,15 @@ function drag(){
 
     if( (p.y-y2)/width > 1){
         console.log((p.y-highlight.attr("y2"))/width);
-        highlight.attr("stroke-width", (parseInt(width)+16) );
-        highlight.attr("y1", (parseInt(y1)+8) )
-        highlight.attr("y2", (parseInt(y2)+8) );
+        highlight.attr("stroke-width", (parseInt(width)+10) );
+        highlight.attr("y1", (parseInt(y1)+5) )
+        highlight.attr("y2", (parseInt(y2)+5) );
     }
     if( width > 20 && (p.y-y2)/width < 0.25){
         console.log((p.y-highlight.attr("y2"))/width);
-        highlight.attr("stroke-width", (parseInt(width)-16) );
-        highlight.attr("y1", (parseInt(y1)-8) )
-        highlight.attr("y2", (parseInt(y2)-8) );
+        highlight.attr("stroke-width", (parseInt(width)-10) );
+        highlight.attr("y1", (parseInt(y1)-5) )
+        highlight.attr("y2", (parseInt(y2)-5) );
     }
 
 
