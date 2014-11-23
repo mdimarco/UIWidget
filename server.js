@@ -2,7 +2,7 @@
 var connect = require('connect')
     , express = require('express')
     , io = require('socket.io')
-    , port = (process.env.PORT || 8081);
+    , port = (process.env.PORT || 5000);
 
 //Setup Express
 var server = express.createServer();
@@ -58,14 +58,7 @@ io.sockets.on('connection', function(socket){
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res){
-  res.render('index.jade', {
-    locals : { 
-              title : 'Your Page Title'
-             ,description: 'Your Page Description'
-             ,author: 'Your Name'
-             ,analyticssiteid: 'XXXXXXX' 
-            }
-  });
+  res.render('main.ejs');
 });
 
 
